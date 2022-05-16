@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="Buff" i="buff" m="buffs.buff" n="devnull_buff_Blinked_Dizzy" s="14478336939106786456">
+  <V n="_temporary_commodity_info" t="enabled">
+    <U n="enabled">
+      <L n="categories">
+        <E>Sloshed_Buffs</E>
+      </L>
+      <T n="max_duration">15</T>
+    </U>
+  </V>-
+  <T n="audio_sting_on_add" p="InGame\Audio\Stings\sting_buff_gain.propx">39b2aa4a:00000000:8af8b916cf64c646</T>
+  <T n="audio_sting_on_remove" p="InGame\Audio\Stings\sting_buff_loss.propx">39b2aa4a:00000000:3bf33216a25546ea</T>
+  <T n="buff_description">0x3DBFEFF2<!--There is nothing quite like the experience of being flicked sideways through space-time. {0.SimFirstName} has a memory of seeing the back of their own head for  a moment.--></T>
+  <T n="buff_name">0xB8D1645F<!--Turned Inside Out and Back--></T>
+  <T n="icon" p="InSP13\UI\Icons\Buffs\Buffs_SicknessDizzy_neg.png">2f7d0004:00000000:a76f38c04c831d80</T>
+  <V n="interactions" t="disabled" />
+  <T n="mood_type">14644<!--Mood_Dazed--></T>
+  <T n="mood_weight">2</T>
+</I>

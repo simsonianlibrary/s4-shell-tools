@@ -1,0 +1,12 @@
+project: /Volumes/Storage/Sims4ModSource/S4ShellTools/example/
+outputDir: build
+excludePatterns:
+  - _attic
+packages:
+  - name: test_tuning.package
+    files:
+      - src/**/*
+stringPackages:
+  - instanceId: '0000000099C531AC'
+    files:
+      - src/strings.properties

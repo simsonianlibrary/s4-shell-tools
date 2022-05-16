@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "outDir": "out/",
+    "moduleResolution": "node"
+  },
+  "files": [
+    "src/lib/buildPackage.ts",
+    "src/lib/findDuplicates.ts",
+    "src/lib/printStringCounts.ts",
+    "src/lib/printStrings.ts",
+    "src/lib/strings.ts",
+    "src/lib/test_parse.ts",
+    "src/lib/types.ts",
+    "src/lib/util.ts",
+    "src/S4ShellTools.ts"
+  ],
+}

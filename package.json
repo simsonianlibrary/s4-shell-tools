@@ -1,0 +1,36 @@
+{
+  "name": "S4ShellTools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/S4ShellTools.ts",
+  "bin": "src/S4ShellTools.ts",
+  "dependencies": {
+    "@s4tk/models": "^0.3.0",
+    "clipboardy": "^2.3.0",
+    "commander-ts": "^0.2.0",
+    "directory-tree": "^3.2.2",
+    "fast-glob": "^3.2.11",
+    "fixed-width-ts-decorator": "^1.2.0",
+    "fs-extra": "^10.1.0",
+    "js-yaml": "^4.1.0",
+    "log4js": "^6.4.6",
+    "read-yaml-file": "^2.1.0",
+    "ts-command-line-args": "^2.3.1",
+    "ts-node": "^10.7.0",
+    "uuid": "^8.3.2",
+    "yaml-env-defaults": "^1.1.3"
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@types/fs-extra": "^9.0.13",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^17.0.31",
+    "@types/uuid": "^8.3.4"
+  },
+  "scripts": {
+    "build": "node_modules/.bin/tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
