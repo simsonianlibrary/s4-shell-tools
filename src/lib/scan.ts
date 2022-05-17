@@ -1,10 +1,11 @@
 import {XmlResource} from "@s4tk/models";
-import {getPackage, toKeyString, TuningTypeCrosswalk} from './util'
+import {toKeyString, TuningTypeCrosswalk} from './util'
 // @ts-ignore
 import dirTree from "directory-tree";
 import {TuningData} from "./types";
 // @ts-ignore
 import log4js from "log4js";
+import {getPackage} from "./packages";
 
 const includeFiles = new Array<any>();
 const logger = log4js.getLogger();

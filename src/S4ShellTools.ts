@@ -1,20 +1,16 @@
 #!/usr/bin/env ts-node
 
 import {
-    action, command, commandOption, description, option,
-    optionalArg, program, requiredArg, usage,
-    variadicArg, version,
+    command, description,
+    program, requiredArg, usage,
+    version,
     Command
 } from 'commander-ts';
-import {printStrings} from "./lib/printStrings";
-import {printStringCounts} from "./lib/printStringCounts";
-import {findDuplicateTuningFiles} from "./lib/findDuplicates";
-import {build} from "./lib/buildPackage";
+import {findDuplicateTuningFiles} from "./lib/scan";
+import {build} from "./lib/build";
 // @ts-ignore
 import log4js from "log4js";
-import {outputFile} from "fs-extra";
-import {appendNewString} from "./lib/util";
-import {dumpStrings} from "./lib/strings";
+import { dumpStrings, printStringCountsInPackage } from "./lib/strings";
 
 const logger = log4js.getLogger();
 logger.level = "debug";
@@ -30,28 +26,17 @@ export class S4ShellTools {
     constructor() {}
 
     run() {
-        console.log(`run`);
+        logger.info(`run`);
     }
 
-    // @ts-ignore
-    @command()
-    'ls-strings'(
-        this: Command,
-        @requiredArg('sourcePath') sourcePath:string,
-        @optionalArg('outputFile') outputFile: string,
-    ) {
-        console.log(`Listing Strings in: ${sourcePath}`);
-        console.log(`Output File: ${outputFile}`);
-        printStrings(sourcePath);
-    }
     // @ts-ignore
     @command()
     'string-summary'(
         this: Command,
         @requiredArg('sourcePath') sourcePath:string,
     ) {
-        console.log(`Listing Strings in: ${sourcePath}`);
-        printStringCounts(sourcePath);
+        logger.info(`Listing entry counts per STBL in: ${sourcePath}`);
+        printStringCountsInPackage(sourcePath);
     }
     // @ts-ignore
     @command()
@@ -59,7 +44,7 @@ export class S4ShellTools {
         this: Command,
         @requiredArg('sourcePath') sourcePath:string,
     ) {
-        console.log(`Looking for duplicated tuning resources in: ${sourcePath}`);
+        logger.info(`Looking for duplicated tuning resources in: ${sourcePath}`);
         findDuplicateTuningFiles(sourcePath);
     }
     // @ts-ignore
@@ -68,20 +53,11 @@ export class S4ShellTools {
         this: Command,
         @requiredArg('buildConfigPath') buildConfigPath: string,
     ) {
-        console.log(`Building Project: ${buildConfigPath}`);
+        logger.info(`Building Project: ${buildConfigPath}`);
         build(buildConfigPath)
-        console.log('Done Building Project');
+        logger.info('Done Building Project');
     }
-    // @ts-ignore
-    @command()
-    'add-string'(
-        this: Command,
-        @requiredArg('stringProperties') stringProperties: string,
-        @requiredArg('textContents') textContents: string,
-    ) {
 
-        appendNewString(stringProperties,textContents);
-    }
     // @ts-ignore
     @command()
     'dump-strings'(

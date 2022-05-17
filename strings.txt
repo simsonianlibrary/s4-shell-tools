@@ -1,0 +1,2 @@
+0x8D6CFF70<!--This is a new string to add to the file-->
+0x89E85A2D<!--this is a new string-->
