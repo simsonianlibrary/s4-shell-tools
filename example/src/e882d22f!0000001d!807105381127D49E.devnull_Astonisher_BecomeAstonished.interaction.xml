@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<I c="SuperInteraction" i="interaction" m="interactions.base.super_interaction" n="devnull_Kourier_BlinkDevice_Start" s="10997126651311034465">
+<I c="SuperInteraction" i="interaction" m="interactions.base.super_interaction" n="devnull_Astonisher_BecomeAstonished" s="9255184447587210398">
   <L n="_constraints">
     <U>
       <L n="constraints">
@@ -35,7 +35,7 @@
     <V t="send_to_inventory" />
   </L>
   <V n="content_score" t="disabled" />
-  <T n="display_name">0x2206A14B<!--Equip Cyberport--></T>
+  <T n="display_name">0xDA752C54<!--Become Astonished--></T>
   <U n="display_name_text_tokens">
     <L n="tokens">
       <V t="participant_type">
@@ -65,10 +65,15 @@
   <V n="outcome" t="single">
     <U n="single">
       <U n="actions">
-        <L n="continuation">
-          <U>
-            <T n="affordance">18181761309057724422<!--SuperInteraction: devnull_Cyberport_PutOn_Cont--></T>
-          </U>
+        <L n="basic_extras">
+          <V t="buff_fire_and_forget">
+            <U n="buff_fire_and_forget">
+              <U n="buff">
+                <T n="buff_type">12019662378815533288<!--Buff: devnull_buff_Astonished--></T>
+              </U>
+              <E n="participant">Actor</E>
+            </U>
+          </V>
         </L>
       </U>
     </U>
@@ -88,16 +93,6 @@
           </U>
         </V>
         <E n="who">Actor</E>
-      </U>
-    </V>
-    <V t="trait">
-      <U n="trait">
-        <L n="blacklist_traits">
-          <T>16815374211379560211<!--Trait: devnull_trait_Cyberport--></T>
-        </L>
-        <V n="tooltip" t="enabled">
-          <T n="enabled">0x08866CA5<!--{0.SimFirstName} already has a Cyberport equipped.--></T>
-        </V>
       </U>
     </V>
   </L>

@@ -1,12 +1,18 @@
-project: /Volumes/Storage/Sims4ModSource/S4ShellTools/example/
-outputDir: build
-excludePatterns:
+output: build
+exclude:
   - _attic
 packages:
   - name: test_tuning.package
     files:
       - src/**/*
-stringPackages:
-  - instanceId: '0000000099C531AC'
+strings:
+  - name: strings_package.package
     files:
-      - src/strings.properties
+#      - src/220557DA!80000000!0000000099C531AC.properties
+      - src/**/*
+merges:
+  - name: Astonisher_Mod.package
+    files:
+      - build/strings_package.package
+      - build/test_tuning.package
+      - include/astonisher_statue.package

@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Welcome5",
+  "definitions": {
+    "Welcome5": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "output": {
+          "type": "string"
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "packages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Merge"
+          }
+        },
+        "strings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/String"
+          }
+        },
+        "merges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Merge"
+          }
+        }
+      },
+      "required": [
+        "output",
+      ],
+      "title": "Welcome5"
+    },
+    "Merge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "files",
+        "name"
+      ],
+      "title": "Merge"
+    },
+    "String": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string",
+        },
+        "instanceId": {
+          "type": "string",
+        }
+      },
+      "required": [
+        "files"
+      ],
+      "title": "String"
+    }
+  }
+}

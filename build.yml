@@ -1,12 +1,12 @@
-project: /Volumes/Storage/Sims4ModSource/S4ShellTools/example/
-outputDir: build
-excludePatterns:
+#project: /Volumes/Storage/Sims4ModSource/S4ShellTools/example/
+output: build
+exclude:
   - _attic
 packages:
   - name: test_tuning.package
     files:
       - src/**/*
-stringPackages:
-  - instanceId: '0000000099C531AC'
-    files:
-      - src/strings.properties
+strings:
+      - name: strings_tuning.package
+        files:
+          - src/220557DA!80000000!0000000099C531AC.properties

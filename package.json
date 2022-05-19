@@ -1,5 +1,5 @@
 {
-  "name": "S4ShellTools",
+  "name": "s4-shell-tools",
   "version": "1.0.0",
   "description": "",
   "main": "src/S4ShellTools.ts",
@@ -13,6 +13,7 @@
     "fixed-width-ts-decorator": "^1.2.0",
     "fs-extra": "^10.1.0",
     "js-yaml": "^4.1.0",
+    "libxmljs": "^0.19.10",
     "log4js": "^6.4.6",
     "properties-reader": "^2.2.0",
     "read-yaml-file": "^2.1.0",
@@ -24,15 +25,20 @@
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
     "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^27.5.1",
     "@types/js-yaml": "^4.0.5",
+    "@types/libxmljs": "^0.18.7",
     "@types/node": "^17.0.31",
     "@types/properties-reader": "^2.1.1",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "jest": "^28.1.0",
+    "ts-jest": "^28.0.2",
+    "typescript": "^4.6.4"
   },
   "scripts": {
     "build": "node_modules/.bin/tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }

@@ -16,6 +16,7 @@
     "src/lib/strings.ts",
     "src/lib/types.ts",
     "src/lib/util.ts",
-    "src/S4ShellTools.ts"
-  ],
+    "src/S4ShellTools.ts",
+    "src/lib/conversions.ts"
+  ]
 }

@@ -1,19 +1,61 @@
-import {FixedWidth, FixedWidthConvertible} from "fixed-width-ts-decorator";
+import path from "path";
+import fse from "fs-extra";
 
 export class OutputFile {
     name: string;
     files: Array<string>;
 }
 export class StringBuildDefinition {
-    instanceId: string;
+    instanceId: string | null;
+    name: string | null;
+    files: Array<string>;
+}
+export class MergeTarget {
+    name: string;
     files: Array<string>;
 }
 export class BuildProject {
-    project: string;
-    outputDir: string;
-    excludePatterns: Array<string>;
-    packages: Array<OutputFile>;
-    stringPackages: Array<StringBuildDefinition>;
+    _project: string;
+    _outputDir: string;
+    _excludePatterns: Array<string>;
+    _packages: Array<OutputFile>;
+    _stringPackages: Array<StringBuildDefinition>;
+    _merges: Array<MergeTarget>;
+    constructor(data:any) {
+        this._project = data.project;
+        this._outputDir = data.output;
+        this._excludePatterns = data.exclude;
+        this._packages = data.packages;
+        this._stringPackages = data.strings;
+        this._merges = data.merges;
+    }
+    public getProject():string {
+        return this._project;
+    }
+    public getOutputDirectory(): string {
+        return path.resolve(this._project, this._outputDir);
+    }
+    public resolveProjectPath(outputFilename:string): string {
+        return path.resolve(this.getProject(),outputFilename);
+    }
+    public resolveOutputPath(outputFilename:string): string {
+        return path.resolve(this.getOutputDirectory(),outputFilename);
+    }
+    public getExcludePatterns(): Array<string> {
+        return this._excludePatterns ? this._excludePatterns : [];
+    }
+    public getPackages(): Array<OutputFile> {
+        return this._packages ? this._packages : [];
+    }
+    public getStringPackages(): Array<StringBuildDefinition> {
+        return this._stringPackages ? this._stringPackages : [];
+    }
+    public getMerges(): Array<MergeTarget> {
+        return this._merges ? this._merges : [];
+    }
+    public ensureBuildDirectory() {
+        fse.ensureDirSync(this.getOutputDirectory());
+    }
 }
 
 export class TuningData {
@@ -28,9 +70,10 @@ export class TuningData {
 }
 
 export class StringTextFileEntry {
-    @FixedWidth({ start: 0, width: 10 })
     hashId: string;
-
-    @FixedWidth({ start: 10, width: 400 })
-    comment: string;
+    contents: string;
+    constructor(hashId:string, contents:string) {
+        this.hashId = hashId;
+        this.contents = contents
+    }
 }

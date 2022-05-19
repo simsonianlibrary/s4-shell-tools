@@ -1,11 +1,13 @@
 import {XmlResource} from "@s4tk/models";
-import {toKeyString, TuningTypeCrosswalk} from './util'
+// import { toKeyString } from './util'
 // @ts-ignore
 import dirTree from "directory-tree";
 import {TuningData} from "./types";
+import {Conversions} from "./conversions";
 // @ts-ignore
 import log4js from "log4js";
 import {getPackage} from "./packages";
+import {TuningResourceType} from "@s4tk/models/enums";
 
 const includeFiles = new Array<any>();
 const logger = log4js.getLogger();
@@ -19,7 +21,7 @@ export function findDuplicates(filenames: string[]) {
         packageFile.entries.forEach(entry => {
             if (entry.value.isXml()) {
                 try {
-                    const key = toKeyString(entry.key.type, entry.key.group, entry.key.instance);
+                    const key = Conversions.generateKeyString(entry.key.type, entry.key.group, entry.key.instance);
                     const xml = entry.value as XmlResource;
                     const tuningName = (xml.dom.children[0] as any).name;
                     if (!resourceMap.get(key)) {
@@ -28,7 +30,7 @@ export function findDuplicates(filenames: string[]) {
                     const tuning = new TuningData(tuningName, filename, key);
                     resourceMap.get(key).push(tuning);
                 } catch (e) {
-                    console.error(`Error parsing resource ${filename}:${toKeyString(entry.key.type, entry.key.group, entry.key.instance)}`, e);
+                    console.error(`Error parsing resource ${filename}:${Conversions.generateKeyString(entry.key.type, entry.key.group, entry.key.instance)}`, e);
                 }
             }
         })
@@ -38,7 +40,7 @@ export function findDuplicates(filenames: string[]) {
         if (value.length > 1) {
             duplicatedCount++
             const typeKey = key.substr(0, 8);
-            logger.debug(`\n${TuningTypeCrosswalk.get(typeKey)}: ${key} ${value[0].name}`);
+            logger.debug(`\n${TuningResourceType[parseInt(typeKey,16)]}: ${key} ${value[0].name}`);
             value.forEach(tuningData => {
                 console.log(`${tuningData.filename}`);
             });

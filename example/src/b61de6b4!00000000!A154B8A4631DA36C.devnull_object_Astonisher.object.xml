@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<I c="GameObject" i="object" m="objects.game_object" n="devnull_object_BagOfCash" s="10304682623544285660">
+<I c="GameObject" i="object" m="objects.game_object" n="devnull_object_Astonisher" s="11625119554327126892">
   <U n="_components">
     <V n="focus" t="enabled">
       <U n="enabled">
@@ -177,11 +177,7 @@
     <T>13328<!--ImmediateSuperInteraction: debug_Reset--></T>
     <T>13326<!--ImmediateSuperInteraction: debug_ObjectDestroy--></T>
     <T>103888<!--ImmediateSuperInteraction: cheat_set_as_head--></T>
-    <T>157510<!--SuperInteraction: generic_Object_Toddler_Check_Out_CircleConstraint--></T>
-     <T>102258<!--SuperInteraction: Ghost_Possess--></T>
-    <T>168502<!--SuperInteraction: Ghost_Pet_Possess--></T>
-    <T>106859<!--SuperInteraction: simRay_Transform_Object--></T>
-    <T>108780<!--SuperInteraction: crimeScene_DustForPrints--></T>
+    <T>9255184447587210398<!--SuperInteraction: devnull_Astonisher_BecomeAstonished--></T>
 
   </L>
   <L n="environment_score_trait_modifiers">

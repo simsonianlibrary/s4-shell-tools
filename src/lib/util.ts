@@ -6,7 +6,8 @@ import {ResourceKey} from "@s4tk/models/types";
 import {BinaryResourceType, StringTableLocale, TuningResourceType} from "@s4tk/models/enums";
 import log4js from "log4js";
 import yaml from "js-yaml";
-
+import libxmljs from "libxmljs";
+import {Conversions} from "./conversions";
 // const clipboard = require('clipboardy')
 const logger = log4js.getLogger();
 
@@ -14,47 +15,55 @@ export function loadYamlFile(path:string):any {
     let yamlFileContents = fs.readFileSync(path, 'utf8');
     return yaml.load(yamlFileContents);
 }
-export function toHex(value: number | bigint): string {
-    return `0x${value.toString(16).toUpperCase().padStart(16, '0')}`;
-}
-export function HexToBigInt(hexValue:string): bigint {
-    return BigInt(`0x${hexValue}`);
-}
-
-export function toHex32(value: number): string {
-    return `0x${value.toString(16).toUpperCase().padStart(8, '0')}`;
-}
-
-export function toKeyString(type: number, group: number, inst: bigint): string {
-    return `${type.toString(16).toUpperCase().padStart(8, '0')}!${group.toString(16).toUpperCase().padStart(8, '0')}!${inst.toString(16).toUpperCase()}`;
-}
 
 export function parseKeyFromPath(filepath: string): ResourceKey {
-    const filename = filepath.split('/').pop().split('.')[0];
-    const [type, group, instanceId] = filename.split('!')
-    return {type: parseInt(type, 16), group: parseInt(group, 16), instance: HexToBigInt(instanceId)} as ResourceKey;
-
+    logger.trace(`Parsing resource key from: ${filepath}`)
+    const [type, group, instanceId] = path.basename(filepath,path.extname(filepath)).split('.')[0].split('!')
+    if(!(type && group && instanceId)) {
+        throw(new Error(`Invalid filename format: ${filepath} => ${[type, group, instanceId]}`))
+    }
+    return {type: parseInt(type, 16), group: parseInt(group, 16), instance: Conversions.strToBigInt(instanceId)} as ResourceKey;
 }
+
+export function canImportFile(filename:string): boolean {
+    if(!filename.endsWith('.xml')) {
+        logger.trace(`Skipping non-XML file: ${filename}`);
+        return false
+    }
+    const resourceKey = parseKeyFromPath(filename);
+    if(BinaryResourceType[resourceKey.type]) {
+        logger.trace(`Is Binary Resource Type`);
+        return true;
+    } else if (TuningTypeName(resourceKey.type)) {
+        logger.trace(`Is Tuning Resource Type`);
+        return true;
+    }
+    logger.warn(`Skipping unhandled file type! Try importing it with S4Studio: ${filename}`);
+    return false;
+}
+
 export function generateResourceFilenameFromKey(resourceKey:ResourceKey): string {
     return generateS4SResourceFilename(resourceKey.type,resourceKey.group, resourceKey.instance)
 }
 export function generateS4SResourceFilename(type:number, group:number, instance:bigint): string {
+    const keyString = Conversions.generateKeyString(type, group, instance)
+    const resourceTypeName = BinaryResourceType[type];
     switch(type) {
         case BinaryResourceType.StringTable:
             const languageName = LocaleName(instance);
-            return `${toHex32(BinaryResourceType.StringTable).slice(2)}!${toHex32(group)}!${toHex(instance)}.${languageName}.StringTable.binary`;
+            return `${keyString}.${languageName}.${resourceTypeName}.binary`;
         case BinaryResourceType.SimData:
-            return `${toHex32(BinaryResourceType.StringTable).slice(2)}!${toHex32(group)}!${toHex(instance)}.SimData.xml`;
+            return `${keyString}.${resourceTypeName}.xml`;
         case BinaryResourceType.CombinedTuning:
         case BinaryResourceType.DstImage:
-            return `${toHex32(BinaryResourceType.StringTable).slice(2)}!${toHex32(group)}!${toHex(instance)}.${BinaryResourceType[type]}.binary`;
+            return `${keyString}.${resourceTypeName}.binary`;
         default:
-            let tuningResourceTypeName = TuningResourceType[type];
+            let tuningResourceTypeName = TuningTypeName(type);
             if(tuningResourceTypeName) {
-                return `${toHex32(BinaryResourceType.StringTable).slice(2)}!${toHex32(group)}!${toHex(instance)}.${tuningResourceTypeName}.xml`;
+                return `${keyString}.${tuningResourceTypeName}.xml`;
             } else {
-                logger.warn(`Unknown resource type: ${toHex(type)} for resource ${toHex32(BinaryResourceType.StringTable).slice(2)}!${toHex32(group)}!${toHex(instance)}`);
-                return `${toHex32(BinaryResourceType.StringTable).slice(2)}!${toHex32(group)}!${toHex(instance)}.xml`;
+                logger.warn(`Unknown resource type: ${keyString}`);
+                return `${keyString}.Unknown.binary`;
             }
     }
 }
@@ -62,20 +71,14 @@ export function generateS4SResourceFilename(type:number, group:number, instance:
 export function LocaleName(value: bigint): string {
     return StringTableLocale[StringTableLocale.getLocale(value)]
 }
-
-
-export const TuningTypeCrosswalk: Map<string, string> = new Map<string, string>();
-
-function buildTuningTypeCrosswalk() {
-    for (let value in TuningResourceType) {
-        TuningTypeCrosswalk.set((TuningResourceType[value] as any).toString(16).toUpperCase().padStart(8, '0'),
-            value.toString());
-    }
+export function TuningTypeName(value: number): string {
+    return TuningResourceType[value]?.toString()
 }
-
-buildTuningTypeCrosswalk();
-
-export function canImportFile(filename:string) {
-    const resourceKey = parseKeyFromPath(filename);
-    return (BinaryResourceType[resourceKey.type] || TuningResourceType[resourceKey.type])
+export function isValidXML(text:string) {
+    try {
+        libxmljs.parseXml(text);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
