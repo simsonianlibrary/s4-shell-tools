@@ -1,19 +1,36 @@
 import path from "path";
 import fse from "fs-extra";
 
+/**
+ * Specifies a package to be built, along with the tuning files that should go into it
+ *
+ */
 export class OutputFile {
     name: string;
     files: Array<string>;
 }
+
+/**
+ * Specifies a package to be build from string .properties files
+ */
 export class StringBuildDefinition {
     instanceId: string | null;
     name: string | null;
     files: Array<string>;
 }
+
+/**
+ * Specifies a package to be built by merging other packages together
+ */
 export class MergeTarget {
     name: string;
+    combineStrings: boolean | null;
     files: Array<string>;
 }
+
+/**
+ * Top level specification of a build project
+ */
 export class BuildProject {
     _project: string;
     _outputDir: string;
@@ -58,6 +75,9 @@ export class BuildProject {
     }
 }
 
+/**
+ * Internal structure used for scanning packages for duplicate tuning files
+ */
 export class TuningData {
     name: string;
     filename: string;
@@ -69,6 +89,9 @@ export class TuningData {
     }
 }
 
+/**
+ * Internal structure used when importing properties files
+ */
 export class StringTextFileEntry {
     hashId: string;
     contents: string;

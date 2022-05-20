@@ -5,7 +5,7 @@
       <L n="categories">
         <E>Sloshed_Buffs</E>
       </L>
-      <T n="max_duration">15</T>
+      <T n="max_duration">20</T>
     </U>
   </V>
   <T n="audio_sting_on_add" p="InGame\Audio\Stings\sting_buff_gain.propx">39b2aa4a:00000000:8af8b916cf64c646</T>

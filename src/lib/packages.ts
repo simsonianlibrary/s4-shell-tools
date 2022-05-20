@@ -4,7 +4,7 @@ import {PackageFileReadingOptions, Resource, ResourceEntry} from "@s4tk/models/t
 import {Package, RawResource, SimDataResource, XmlResource} from "@s4tk/models";
 import {isValidXML, parseKeyFromPath} from "./util";
 import {SimDataResourceType} from "./build";
-import {TuningResourceType} from "@s4tk/models/enums";
+import {TuningResourceType,BinaryResourceType} from "@s4tk/models/enums";
 import log4js from "log4js";
 
 const logger = log4js.getLogger();
@@ -39,7 +39,7 @@ export function makeResourceEntry(filepath: string): ResourceEntry {
 
     const resourceKey = parseKeyFromPath(filepath);
     
-    if (resourceKey.type == SimDataResourceType) {
+    if (resourceKey.type == BinaryResourceType.SimData) {
         let stringContents = getBuffer(filepath).toString();
         if (!isValidXML(stringContents)) {
             throw(new Error(`File contains invalid XML: ${filepath}`));

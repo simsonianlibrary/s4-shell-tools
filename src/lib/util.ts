@@ -11,11 +11,19 @@ import {Conversions} from "./conversions";
 // const clipboard = require('clipboardy')
 const logger = log4js.getLogger();
 
+/**
+ * Read a YML file and return the contents as an object
+ * @param path path to the YML file
+ */
 export function loadYamlFile(path:string):any {
     let yamlFileContents = fs.readFileSync(path, 'utf8');
     return yaml.load(yamlFileContents);
 }
 
+/**
+ * Parse a resource key from a file name based on S4Studio naming conventions.
+ * @param filepath file to parse resource key from
+ */
 export function parseKeyFromPath(filepath: string): ResourceKey {
     logger.trace(`Parsing resource key from: ${filepath}`)
     const [type, group, instanceId] = path.basename(filepath,path.extname(filepath)).split('.')[0].split('!')
@@ -25,6 +33,10 @@ export function parseKeyFromPath(filepath: string): ResourceKey {
     return {type: parseInt(type, 16), group: parseInt(group, 16), instance: Conversions.strToBigInt(instanceId)} as ResourceKey;
 }
 
+/**
+ * Test whether a given file can be imported by this tool
+ * @param filename file to test
+ */
 export function canImportFile(filename:string): boolean {
     if(!filename.endsWith('.xml')) {
         logger.trace(`Skipping non-XML file: ${filename}`);
@@ -42,9 +54,20 @@ export function canImportFile(filename:string): boolean {
     return false;
 }
 
+/**
+ * Generate a S4S format filename from a given resource key
+ * @param resourceKey ResourceKey to generate filename for
+ */
 export function generateResourceFilenameFromKey(resourceKey:ResourceKey): string {
     return generateS4SResourceFilename(resourceKey.type,resourceKey.group, resourceKey.instance)
 }
+
+/**
+ * Generate a S4S format filename from a given resource key
+ * @param type resource type
+ * @param group resource group
+ * @param instance instance ID
+ */
 export function generateS4SResourceFilename(type:number, group:number, instance:bigint): string {
     const keyString = Conversions.generateKeyString(type, group, instance)
     const resourceTypeName = BinaryResourceType[type];
@@ -68,12 +91,28 @@ export function generateS4SResourceFilename(type:number, group:number, instance:
     }
 }
 
+/**
+ * Lookup the locale name for a given locale code
+ * @param value Locale code
+ * @constructor
+ */
 export function LocaleName(value: bigint): string {
     return StringTableLocale[StringTableLocale.getLocale(value)]
 }
+
+/**
+ * Lookup the tuning type name based on the tuning type
+ * @param value tuning type code
+ * @constructor
+ */
 export function TuningTypeName(value: number): string {
     return TuningResourceType[value]?.toString()
 }
+
+/**
+ * Test whether a string contains valid XML
+ * @param text string to check
+ */
 export function isValidXML(text:string) {
     try {
         libxmljs.parseXml(text);

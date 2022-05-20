@@ -1,0 +1,13 @@
+{
+  "entryPoints": [
+    "src/S4ShellTools.ts",
+    "src/lib/build.ts",
+    "src/lib/merge.ts",
+    "src/lib/strings.ts",
+    "src/lib/types.ts",
+    "src/lib/conversions.ts",
+    "src/lib/util.ts",
+    "src/lib/scan.ts"
+  ],
+  "out": "build/docs"
+}

@@ -46,6 +46,10 @@
         "name": {
           "type": "string"
         },
+        "combineStrings": {
+          "type": "boolean"
+        },
+
         "files": {
           "type": "array",
           "items": {

@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "module": "commonjs",
+    "lib": ["es2015", "es6"],
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -14,8 +16,10 @@
     "src/lib/build.ts",
     "src/lib/scan.ts",
     "src/lib/strings.ts",
+    "src/lib/merge.ts",
     "src/lib/types.ts",
     "src/lib/util.ts",
+    "src/lib/packages.ts",
     "src/S4ShellTools.ts",
     "src/lib/conversions.ts"
   ]

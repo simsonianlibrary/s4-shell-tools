@@ -150,7 +150,7 @@ function mergePackages(config: BuildProject) {
             // const outputFile = `${outputDir}/${mergeTarget.name}`;
             const outputFile = config.resolveOutputPath(mergeTarget.name);
             const donorPaths = mergeTarget.files.map<string>(filename => config.resolveProjectPath(filename))
-            mergePackageFilesToPath(donorPaths, outputFile);
+            mergePackageFilesToPath(donorPaths, outputFile, mergeTarget.combineStrings);
         })
     } catch (e) {
         logger.error(`mergePackages:ERROR:${e}`);

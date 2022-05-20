@@ -27,13 +27,10 @@
   <V n="basic_content" t="one_shot">
     <U n="one_shot">
       <U n="animation_ref">
-        <T n="factory">12140<!--AnimationElement: TV_UseRemote_Use--></T>
+        <T n="factory">28379<!--AnimationElement: Socials_Responses_Miscellaneous_Horrified--></T>
       </U>
     </U>
   </V>
-  <L n="basic_extras">
-    <V t="send_to_inventory" />
-  </L>
   <V n="content_score" t="disabled" />
   <T n="display_name">0xDA752C54<!--Become Astonished--></T>
   <U n="display_name_text_tokens">

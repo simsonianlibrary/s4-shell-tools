@@ -4,7 +4,7 @@ import {
     command, description,
     program, requiredArg, usage,
     version,variadicArg,
-    Command, option
+    Command, option, commandOption
 } from 'commander-ts';
 import {findDuplicateTuningFiles} from "./lib/scan";
 import {build} from "./lib/build";
@@ -26,53 +26,68 @@ logger.level = "trace";
 @description('Tools to build and manage a Sims 4 .package file')
 @usage('--help')
 export class S4ShellTools {
-    // @option('--log-level <logLevel>')
-    // logLevel: string = 'info';
+    @option('--debug')
+    debug: boolean = false;
+
+    @option('--trace')
+    trace: boolean = false;
 
     constructor() {
         setLogLevel()
     }
 
+    @command()
     run() {
         logger.info(`run`);
     }
 
     // @ts-ignore
     @command()
+    @commandOption('--config <configPath>')
     build(
         this: Command,
-        @requiredArg('buildConfigPath') buildConfigPath: string,
     ) {
-        logger.info(`Building Project: ${buildConfigPath}`);
-        build(path.resolve(process.cwd(), buildConfigPath))
+        const options = this.opts();
+        const config = options.config ? options.config : "./build.yml"
+        const projectPath = path.resolve(process.cwd(), config);
+        logger.info(`Building Project: ${projectPath}`);
+        build(projectPath)
         logger.info('Done Building Project');
     }
     // @ts-ignore
     @command()
+    @commandOption('--combineStrings')
+    @commandOption('--output <output>')
     'merge'(
         this: Command,
-        @requiredArg('outputPath') outputPath: string,
-        @variadicArg('packagePaths') packagePaths: Array<string>,
+        @variadicArg('packagePaths') packagePaths: Array<string>
     ) {
-        mergePackageFilesToPath(packagePaths,outputPath);
+        const options = this.opts();
+        const output = options.output ? options.output : "./build"
+        mergePackageFilesToPath(packagePaths,output, options.combineStrings);
     }
     // @ts-ignore
     @command()
+    @commandOption('--output <output>')
     'dump-strings'(
         this: Command,
         @requiredArg('packageFile') packageFile: string,
-        @requiredArg('outputDirectory') outputDirectory: string,
     ) {
-        dumpStrings(packageFile,outputDirectory);
+        const options = this.opts();
+        console.log(`debug: ${this.parent.opts().debug}`)
+        const output = options.output ? options.output : "./build"
+        dumpStrings(packageFile,output);
     }
     // @ts-ignore
     @command()
+    @commandOption('--output <output>')
     'import-property-files'(
         this: Command,
-        @requiredArg('outputPath') outputPath: string,
         @variadicArg('propertyFiles') propertyFiles: Array<string>,
     ) {
-        buildStringsPackage(outputPath,propertyFiles);
+        const options = this.opts();
+        const output = options.output ? options.output : "./build/strings.package"
+        buildStringsPackage(output,propertyFiles);
     }
     // @ts-ignore
     @command()
@@ -101,7 +116,6 @@ function setLogLevel() {
         logger.info(`Using default log level ${logger.level}`)
         return;
     }
-    // logger.info(`Setting log level to: ${logLevel}`);
     switch(logLevel.toUpperCase()) {
         case 'INFO':
             logger.level = "INFO";

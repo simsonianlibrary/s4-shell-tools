@@ -31,25 +31,6 @@
           <U>
             <L n="client_states">
               <U>
-                <T n="key">17572599230191694980<!--ObjectStateValue: devnull_ObjectStateValue_MacGuffin_Destination_None--></T>
-              </U>
-              <U>
-                <T n="key">14410121385960909665<!--ObjectStateValue: devnull_ObjectStateValue_MacGuffin_Destination_ScienceLab--></T>
-              </U>
-              <U>
-                <T n="key">17692938927672942704<!--ObjectStateValue: devnull_ObjectStateValue_MacGuffin_Destination_PoliceStation--></T>
-              </U>
-              <U>
-                <T n="key">13568664272948845580<!--ObjectStateValue: devnull_ObjectStateValue_MacGuffin_Destination_Hospital--></T>
-              </U>
-            </L>
-            <V n="default_value" t="reference">
-              <T n="reference">17572599230191694980<!--ObjectStateValue: devnull_ObjectStateValue_MacGuffin_Destination_None--></T>
-            </V>
-          </U>
-          <U>
-            <L n="client_states">
-              <U>
                 <T n="key">108830<!--ObjectStateValue: ObjectStateValue_Detective_NotStolen--></T>
               </U>
               <U>

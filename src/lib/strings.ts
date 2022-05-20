@@ -12,7 +12,7 @@ import {Conversions} from "./conversions";
 const logger = log4js.getLogger();
 
 // replaced with PropertiesReader for now
-export function ParseStringsTextFile(filename: string): Array<StringTextFileEntry> {
+export function parseStringsTextFile(filename: string): Array<StringTextFileEntry> {
     logger.debug(`opening strings file: ${filename}`);
     const file = fs.readFileSync(filename, {encoding: 'utf8'});
     const lines = file.split('\n').filter(l => l);
@@ -54,13 +54,6 @@ export function buildStringsPackage(outputPath:string,
                 // read the stbl key from the files
                 instanceId = Conversions.numToHex64Str(parseKeyFromPath(propertyFilePath).instance);
             }
-
-            // write the STBL resource to disk
-            // const stblFilename = generateS4SResourceFilename(BinaryResourceType.StringTable, parseInt('80000000',16), Conversions.strToBigInt(instanceId));
-            // let filename = outputPath;//`${outputDirectory}/${stblFilename}`
-            // const stblBuffer = mergedStbl.getBuffer();
-            // fs.writeFileSync(filename, stblBuffer);
-            // logger.trace(`Wrote strings file to disk: ${filename}`);
 
             // const resourceKey = parseKeyFromPath(propertyFilePath)
             // write the resource to the new package

@@ -6,15 +6,18 @@
   "bin": "src/S4ShellTools.ts",
   "dependencies": {
     "@s4tk/models": "^0.3.0",
+    "@teppeis/multimaps": "^2.0.0",
     "clipboardy": "^2.3.0",
     "commander-ts": "^0.2.0",
     "directory-tree": "^3.2.2",
+    "enum-for": "^0.0.5",
     "fast-glob": "^3.2.11",
     "fixed-width-ts-decorator": "^1.2.0",
     "fs-extra": "^10.1.0",
     "js-yaml": "^4.1.0",
     "libxmljs": "^0.19.10",
     "log4js": "^6.4.6",
+    "oclif": "^3.0.1",
     "properties-reader": "^2.2.0",
     "read-yaml-file": "^2.1.0",
     "ts-command-line-args": "^2.3.1",
@@ -37,7 +40,8 @@
   },
   "scripts": {
     "build": "node_modules/.bin/tsc",
-    "test": "npx jest"
+    "test": "npx jest",
+    "example": "npx S4ShellTools build example/build.yml"
   },
   "author": "",
   "license": "MIT"
