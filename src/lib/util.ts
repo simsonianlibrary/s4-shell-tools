@@ -1,6 +1,4 @@
-// @ts-ignore
 import fs from "fs";
-// @ts-ignore
 import path from "path";
 import {ResourceKey} from "@s4tk/models/types";
 import {BinaryResourceType, StringTableLocale, TuningResourceType} from "@s4tk/models/enums";
@@ -8,7 +6,6 @@ import log4js from "log4js";
 import yaml from "js-yaml";
 import libxmljs from "libxmljs";
 import {Conversions} from "./conversions";
-// const clipboard = require('clipboardy')
 const logger = log4js.getLogger();
 
 /**

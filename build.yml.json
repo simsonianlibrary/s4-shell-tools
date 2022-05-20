@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/Welcome5",
+  "$ref": "#/definitions/S4ShellToolsBuild",
   "definitions": {
-    "Welcome5": {
+    "S4ShellToolsBuild": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -35,7 +35,7 @@
         }
       },
       "required": [
-        "output",
+        "output"
       ],
       "title": "Welcome5"
     },
@@ -74,10 +74,10 @@
           }
         },
         "name": {
-          "type": "string",
+          "type": "string"
         },
         "instanceId": {
-          "type": "string",
+          "type": "string"
         }
       },
       "required": [

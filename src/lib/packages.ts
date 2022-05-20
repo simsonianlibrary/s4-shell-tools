@@ -3,7 +3,6 @@ import fs from "fs";
 import {PackageFileReadingOptions, Resource, ResourceEntry} from "@s4tk/models/types";
 import {Package, RawResource, SimDataResource, XmlResource} from "@s4tk/models";
 import {isValidXML, parseKeyFromPath} from "./util";
-import {SimDataResourceType} from "./build";
 import {TuningResourceType,BinaryResourceType} from "@s4tk/models/enums";
 import log4js from "log4js";
 

@@ -1,21 +1,16 @@
 import {XmlResource} from "@s4tk/models";
-// import { toKeyString } from './util'
-// @ts-ignore
 import dirTree from "directory-tree";
 import {TuningData} from "./types";
 import {Conversions} from "./conversions";
-// @ts-ignore
 import log4js from "log4js";
 import {getPackage} from "./packages";
 import {TuningResourceType} from "@s4tk/models/enums";
 
-const includeFiles = new Array<any>();
 const logger = log4js.getLogger();
 
 
-const resourceMap: Map<string, Array<TuningData>> = new Map<string, Array<TuningData>>();
-
 export function findDuplicates(filenames: string[]) {
+    const resourceMap: Map<string, Array<TuningData>> = new Map<string, Array<TuningData>>();
     filenames.forEach(filename => {
         const packageFile = getPackage(filename);
         packageFile.entries.forEach(entry => {
@@ -50,6 +45,7 @@ export function findDuplicates(filenames: string[]) {
 }
 
 export function findDuplicateTuningFiles(filepath: string) {
+    const includeFiles = new Array<any>();
     dirTree(filepath,
         {extensions: /\.package/}, (item: any, _PATH: any, _stats: any) => {
             includeFiles.push(item)

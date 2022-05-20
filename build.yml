@@ -1,4 +1,3 @@
-#project: /Volumes/Storage/Sims4ModSource/S4ShellTools/example/
 output: build
 exclude:
   - _attic

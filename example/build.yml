@@ -2,19 +2,18 @@ output: build
 exclude:
   - _attic
 packages:
-  - name: test_tuning.package
+  - name: mod_tuning.package
     files:
       - src/tuning/**/*
 strings:
-  - name: strings_package.package
+  - name: mod_strings.package
     files:
-      #      - src/220557DA!80000000!0000000099C531AC.properties
       - src/strings/**/*
 merges:
   - name: Astonisher_Mod.package
-    combineStrings: false
+    combineStrings: true
     files:
-      - build/strings_package.package
-      - build/test_tuning.package
+      - build/mod_strings.package
+      - build/mod_tuning.package
       - include/astonisher_statue.package
       - include/astonisher2_statue.package

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["es2015", "es6"],
+    "lib": ["es5", "es6", "dom"],
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "outDir": "out/",
+    "rootDir": "src",
     "moduleResolution": "node"
   },
   "files": [
@@ -21,6 +22,6 @@
     "src/lib/util.ts",
     "src/lib/packages.ts",
     "src/S4ShellTools.ts",
-    "src/lib/conversions.ts"
+    "src/lib/conversions.ts",
   ]
 }

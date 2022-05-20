@@ -4,13 +4,12 @@ import {
     command, description,
     program, requiredArg, usage,
     version,variadicArg,
-    Command, option, commandOption
+    Command, option, commandOption,
 } from 'commander-ts';
 import {findDuplicateTuningFiles} from "./lib/scan";
 import {build} from "./lib/build";
-import {mergePackageFilesToPath} from "./lib/merge";
+import {MergeTarget} from "./lib/merge";
 
-// @ts-ignore
 import log4js from "log4js";
 import {buildStringsPackage, dumpStrings, printStringCountsInPackage} from "./lib/strings";
 import path from "path";
@@ -20,7 +19,6 @@ logger.level = "trace";
 
 
 
-// @ts-ignore
 @program()
 @version('1.0.0')
 @description('Tools to build and manage a Sims 4 .package file')
@@ -33,40 +31,50 @@ export class S4ShellTools {
     trace: boolean = false;
 
     constructor() {
-        setLogLevel()
     }
 
-    @command()
     run() {
-        logger.info(`run`);
-    }
 
-    // @ts-ignore
+    }
     @command()
     @commandOption('--config <configPath>')
     build(
         this: Command,
     ) {
         const options = this.opts();
+        setLogLevel(this.parent?.opts());
+
+        // if build config path isn't present, default to 'build.yml' in the current directory
         const config = options.config ? options.config : "./build.yml"
+
+        // get the project path relative to the current directory
         const projectPath = path.resolve(process.cwd(), config);
+
         logger.info(`Building Project: ${projectPath}`);
         build(projectPath)
         logger.info('Done Building Project');
     }
-    // @ts-ignore
     @command()
     @commandOption('--combineStrings')
     @commandOption('--output <output>')
-    'merge'(
+    merge(
         this: Command,
         @variadicArg('packagePaths') packagePaths: Array<string>
     ) {
         const options = this.opts();
+        setLogLevel(this.parent?.opts())
+
+        // if build output path isn't present, default to 'build' in the current directory
         const output = options.output ? options.output : "./build"
-        mergePackageFilesToPath(packagePaths,output, options.combineStrings);
+
+        const mergeData = {
+            name:output,
+            files:packagePaths,
+            combineStrings:options.combineStrings
+        } as MergeTarget;
+        const mergeTarget = new MergeTarget(null, mergeData);
+        mergeTarget.mergePackageFilesToPath(packagePaths,output, options.combineStrings);
     }
-    // @ts-ignore
     @command()
     @commandOption('--output <output>')
     'dump-strings'(
@@ -74,11 +82,14 @@ export class S4ShellTools {
         @requiredArg('packageFile') packageFile: string,
     ) {
         const options = this.opts();
-        console.log(`debug: ${this.parent.opts().debug}`)
+        setLogLevel(this.parent?.opts())
+
+        // if build output path isn't present, default to 'build' in the current directory
         const output = options.output ? options.output : "./build"
+
         dumpStrings(packageFile,output);
     }
-    // @ts-ignore
+
     @command()
     @commandOption('--output <output>')
     'import-property-files'(
@@ -86,36 +97,40 @@ export class S4ShellTools {
         @variadicArg('propertyFiles') propertyFiles: Array<string>,
     ) {
         const options = this.opts();
+        setLogLevel(this.parent?.opts())
+
+        // if build output path isn't present, default to 'build/strings.package' in the current directory
         const output = options.output ? options.output : "./build/strings.package"
+
         buildStringsPackage(output,propertyFiles);
     }
-    // @ts-ignore
+
     @command()
     'string-summary'(
         this: Command,
         @requiredArg('sourcePath') sourcePath:string,
     ) {
+        setLogLevel(this.parent?.opts())
+
         logger.info(`Listing entry counts per STBL in: ${sourcePath}`);
         printStringCountsInPackage(sourcePath);
     }
-    // @ts-ignore
+
     @command()
     'find-duplicate-tuning'(
         this: Command,
         @requiredArg('sourcePath') sourcePath:string,
     ) {
+        setLogLevel(this.parent?.opts())
+
         logger.info(`Looking for duplicated tuning resources in: ${sourcePath}`);
         findDuplicateTuningFiles(sourcePath);
     }
 
 }
 
-function setLogLevel() {
-    let logLevel = process.env.LOG_LEVEL;
-    if(!logLevel) {
-        logger.info(`Using default log level ${logger.level}`)
-        return;
-    }
+function setLogLevel(options:any) {
+    const logLevel = options?.trace ? "TRACE" : (options?.debug ? "DEBUG" : "INFO");
     switch(logLevel.toUpperCase()) {
         case 'INFO':
             logger.level = "INFO";
