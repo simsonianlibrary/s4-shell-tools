@@ -1,6 +1,6 @@
 {
   "name": "s4-shell-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI wrapper for the s4tk library that provides commands to perform common operations on Sims 4 game mod files, such as .packages",
   "main": "src/S4ShellTools.ts",
   "bin": "src/S4ShellTools.ts",
