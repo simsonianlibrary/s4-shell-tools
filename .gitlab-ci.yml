@@ -1,3 +1,7 @@
+variables:
+  NODE_IMAGE: "node:18-slim" # Node.js version, adjust as needed
+  PACKAGE_NAME: "s4-shell-tools" # Replace with your tool's name
+
 stages:
   - build
   - dockerize
