@@ -41,8 +41,9 @@ publish_module:
   image: $NODE_IMAGE
   script:
     # Configure GitLab registry authentication
-    - echo "//registry.npm.gitlab.com/:_authToken=${CI_JOB_TOKEN}" > ~/.npmrc
-    - npm publish --registry=https://registry.npm.gitlab.com/
+    - echo "@simsonianlibrary:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - npm publish
   dependencies:
     - build # Ensure it uses the built files
   rules:
