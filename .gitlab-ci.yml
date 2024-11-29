@@ -20,7 +20,7 @@ build:
 build_docker_image:
   stage: dockerize
   image: docker:24 # Use a Docker-in-Docker image
-    dependencies:
+  dependencies:
     - build
   services:
     - docker:24-dind
