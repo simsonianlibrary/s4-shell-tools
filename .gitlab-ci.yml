@@ -1,7 +1,7 @@
 stages:
   - build
   - dockerize
-  - publish
+  - publish_module
 
 # Build the Node.js project
 build:
@@ -32,8 +32,8 @@ build_docker_image:
   only:
     - main # Only run this stage for the main branch
 
-publish:
-  stage: publish
+publish_module:
+  stage: publish_module
   image: $NODE_IMAGE
   script:
     # Configure GitLab registry authentication
