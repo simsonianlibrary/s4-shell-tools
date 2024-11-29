@@ -1,0 +1,47 @@
+stages:
+  - build
+  - dockerize
+  - publish
+
+# Build the Node.js project
+build:
+  stage: build
+  image: node:16
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+      - node_modules/
+
+
+# Build Docker image
+build_docker_image:
+  stage: dockerize
+  image: docker:24 # Use a Docker-in-Docker image
+    dependencies:
+    - build
+  services:
+    - docker:24-dind
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+  only:
+    - main # Only run this stage for the main branch
+
+publish:
+  stage: publish
+  image: $NODE_IMAGE
+  script:
+    # Configure GitLab registry authentication
+    - echo "//registry.npm.gitlab.com/:_authToken=${CI_JOB_TOKEN}" > ~/.npmrc
+    - npm publish --registry=https://registry.npm.gitlab.com/
+  dependencies:
+    - build # Ensure it uses the built files
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"' # Only publish from the main branch
+  only:
+    - main
