@@ -5,5 +5,4 @@ out/
 .DS_Store
 node_modules/
 .dist
-dist/package.json
-dist/README.md
+dist/
