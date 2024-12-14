@@ -1,5 +1,5 @@
 variables:
-  NODE_IMAGE: "node:18-slim" # Node.js version, adjust as needed
+  NODE_IMAGE: "node:18" # Node.js version, adjust as needed
   PACKAGE_NAME: "s4-shell-tools" # Replace with your tool's name
 
 stages:
@@ -10,7 +10,7 @@ stages:
 # Build the Node.js project
 build:
   stage: build
-  image: node:16
+  image: node:18
   script:
     - npm install
     - npm run build
