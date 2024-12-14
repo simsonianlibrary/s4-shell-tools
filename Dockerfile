@@ -4,11 +4,14 @@ FROM node:16
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install any dependencies (optional, if you have a package.json)
-COPY dist/ /app/
+# Copy package.json and package-lock.json first to leverage Docker caching
+COPY s4-shell-tools/package*.json ./
 
-# Install the Node.js dependencies (use yarn or npm as per your project)
-RUN npm install
+# Install dependencies
+RUN npm install --production
+
+# Copy the rest of the application files
+COPY s4-shell-tools/ ./
 
 # Expose a port if needed (this is usually useful for web apps, but optional here)
 EXPOSE 3000
