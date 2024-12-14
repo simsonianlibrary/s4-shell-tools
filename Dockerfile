@@ -13,10 +13,12 @@ RUN npm install --production
 # Copy the rest of the application files
 COPY s4-shell-tools/ ./
 
+RUN npm run build && npm run postbuild
+
 # Expose a port if needed (this is usually useful for web apps, but optional here)
 EXPOSE 3000
-
+f
 # Define the entrypoint to the build tool/script
 # If you're using npm run build or a custom script, add it here.
-ENTRYPOINT ["node", "S4ShellTools.js"]
+ENTRYPOINT ["node", "dist/S4ShellTools.js"]
 CMD ["-h"]

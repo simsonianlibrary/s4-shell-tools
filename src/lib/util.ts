@@ -4,10 +4,10 @@ import {ResourceKey} from "@s4tk/models/types";
 import {BinaryResourceType, StringTableLocale, TuningResourceType} from "@s4tk/models/enums";
 import log4js from "log4js";
 import yaml from "js-yaml";
-import libxmljs from "libxmljs";
 import {Conversions} from "./conversions";
 const logger = log4js.getLogger();
-
+import { XMLValidator } from "fast-xml-parser";
+// f
 /**
  * Read a YML file and return the contents as an object
  * @param path path to the YML file
@@ -111,10 +111,9 @@ export function TuningTypeName(value: number): string {
  * @param text string to check
  */
 export function isValidXML(text:string) {
-    try {
-        libxmljs.parseXml(text);
-    } catch (e) {
-        return false;
-    }
-    return true;
+
+    const result = XMLValidator.validate(text, {
+        allowBooleanAttributes: true
+    });
+    return result    
 }
