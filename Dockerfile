@@ -5,13 +5,13 @@ FROM node:16
 WORKDIR /app
 
 # Copy package.json and package-lock.json first to leverage Docker caching
-COPY s4-shell-tools/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install --production
 
 # Copy the rest of the application files
-COPY s4-shell-tools/ ./
+COPY / ./
 
 RUN npm run build && npm run postbuild
 
