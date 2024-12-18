@@ -146,7 +146,6 @@ export class MergeTarget {
     }
     getStringTableByLocale(stringTables:Array<ResourceKeyPair>,locale:StringTableLocale):ResourceKeyPair {
         return stringTables.find(resourceKeyPair => {
-            logger.debug(`checking existing stbl ${getLocale(resourceKeyPair.key.instance)} == ${locale}`);
             return getLocale(resourceKeyPair.key.instance) == locale
         })
     }
