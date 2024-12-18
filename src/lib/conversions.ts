@@ -22,6 +22,10 @@ export class Conversions {
         return `${value.toString(16).toUpperCase().padStart(8, '0')}`;
     }
 
+    static numToLocaleCode(value: number): string {
+        return `0x${value.toString(16).toUpperCase().padStart(2, '0')}`;
+    }
+
     static generateKeyString(type: number, group: number, inst: bigint): string {
         return `${Conversions.numToHex32Str(type)}!${Conversions.numToHex32Str(group)}!${Conversions.numToHex64Str(inst)}`;
     }

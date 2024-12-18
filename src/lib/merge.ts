@@ -27,7 +27,9 @@ import setHighByte = StringTableLocale.setHighByte;
 import getLocale = StringTableLocale.getLocale;
 import log4js from "log4js";
 import {BuildProject} from "./build";
+import {Conversions} from "./conversions";
 const logger = log4js.getLogger();
+
 
 
 export class MergeTarget {
@@ -114,9 +116,11 @@ export class MergeTarget {
             // create an STBL resource for each non-English locale code, and add the list of string entries for that locale from the multimap.
             // For each entry in the English STBL, ensure that there is a matching string entry in each of the other locale-coded STBLs.
             // if it's missing in an STBL, copy it from the English STBL.
+            logger.debug(`All locale codes: ${allNonEnLocaleCodes}`)
             allNonEnLocaleCodes.forEach( localeCode => {
                 let nonEnStbl = this.getStringTableByLocale(stblList,localeCode as StringTableLocale)
                 if(!nonEnStbl) {
+                    logger.debug(`Strings for ${localeCode} not found. Creating them...`)
                     const emptyStbl = new StringTableResource();
                     const instId = setHighByte(localeCode as StringTableLocale,newStringTableId);
                     const newStblKey = {
@@ -125,9 +129,14 @@ export class MergeTarget {
                         instance: instId
                     } as ResourceKey
                     nonEnStbl = {key:newStblKey, value: emptyStbl} as ResourceKeyPair;
+                    stblList.push(nonEnStbl);
+
+                } else {
+                    logger.debug(`STBL for ${localeCode} found.`);
                 }
                 (enStrings.value as StringTableResource).entries.forEach( stringEntry => {
                     if(!(nonEnStbl.value as StringTableResource).entries.find(nonEnStbl => nonEnStbl.key == stringEntry.key)) {
+                        logger.debug(`Copying string ${stringEntry.key} from EN to ${Conversions.toHex(localeCode)}.`);
                         (nonEnStbl.value as StringTableResource).add(stringEntry.key,stringEntry.value);
                     }
                 })
@@ -137,6 +146,7 @@ export class MergeTarget {
     }
     getStringTableByLocale(stringTables:Array<ResourceKeyPair>,locale:StringTableLocale):ResourceKeyPair {
         return stringTables.find(resourceKeyPair => {
+            logger.debug(`checking existing stbl ${getLocale(resourceKeyPair.key.instance)} == ${locale}`);
             return getLocale(resourceKeyPair.key.instance) == locale
         })
     }
