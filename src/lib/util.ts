@@ -1,12 +1,17 @@
 import fs from "fs";
 import path from "path";
-import {ResourceKey} from "@s4tk/models/types";
-import {BinaryResourceType, StringTableLocale, TuningResourceType} from "@s4tk/models/enums";
+import {ResourceEntry, ResourceKey} from "@s4tk/models/types";
+import {fnv64} from "@s4tk/hashing";
+
+import {BinaryResourceType, SimDataGroup, StringTableLocale, TuningResourceType} from "@s4tk/models/enums";
 import log4js from "log4js";
 import yaml from "js-yaml";
 import {Conversions} from "./conversions";
 const logger = log4js.getLogger();
 import { XMLValidator } from "fast-xml-parser";
+import { XmlDocumentNode } from '@s4tk/xml-dom'
+import { readFileSync } from 'fs';
+
 // f
 /**
  * Read a YML file and return the contents as an object
@@ -23,11 +28,37 @@ export function loadYamlFile(path:string):any {
  */
 export function parseKeyFromPath(filepath: string): ResourceKey {
     logger.trace(`Parsing resource key from: ${filepath}`)
-    const [type, group, instanceId] = path.basename(filepath,path.extname(filepath)).split('.')[0].split('!')
-    if(!(type && group && instanceId)) {
-        throw(new Error(`Invalid filename format: ${filepath} => ${[type, group, instanceId]}`))
+    let type: number;
+    let group: number;
+    let instanceId: bigint;
+
+    if(filepath.endsWith(".xml")) {
+        const file = readFileSync(filepath, 'utf-8');
+
+        let docNode = XmlDocumentNode.from(file);
+        if(docNode.child.tag == 'SimData') {
+            var dataGroup = SimDataGroup[(docNode.child.child.child.attributes.schema)];
+            let keystr = Conversions.generateKeyString(0x545AC67A,parseInt(dataGroup),fnv64(docNode.child.child.child.attributes.name)) 
+            logger.debug(`Key: ${keystr}`);
+            type = 0x545AC67A;
+            group = parseInt(dataGroup);
+            instanceId = fnv64(docNode.child.child.child.attributes.name);
+        } else {
+            // logger.info(`Class: ${docNode.child.attributes.i}`);
+            var typeCode = TuningResourceType.parseAttr(docNode.child.attributes.i);
+            let id = BigInt(docNode.child.attributes.s);
+            let keystr = Conversions.generateKeyString(typeCode,0x00000000,id); 
+            logger.debug(`Key: ${keystr}`);
+            type = typeCode;
+            group = 0x00000000;
+            instanceId = id;
+        }
+
     }
-    return {type: parseInt(type, 16), group: parseInt(group, 16), instance: Conversions.strToBigInt(instanceId)} as ResourceKey;
+    if(!(type && instanceId)) {
+        throw(new Error(`Invalid XML: ${filepath} => ${[type, group, instanceId]}`))
+    }
+    return {type: type, group, instance: instanceId} as ResourceKey;
 }
 
 /**

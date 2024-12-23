@@ -54,6 +54,9 @@ export class MergeTarget {
         const targetPackage = this.mergePackages(donorBuffers, aggregateStringTables);
         const duplicateKeys = targetPackage.findRepeatedKeys();
         if(duplicateKeys?.length) {
+            duplicateKeys.forEach( (key) => {
+                logger.error(`Duplicate Key Found: ${key.instance.toString()}`)
+            });
             throw(new Error(`DUPLICATE TUNING RESOURCES FOUND: ${duplicateKeys}`))
         }
         savePackage(targetPackage, outputPath);
