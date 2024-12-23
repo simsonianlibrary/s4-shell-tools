@@ -47,9 +47,9 @@ Specifies a list of package names to build along with the tuning files to build 
 packages:
     - name: NameOfOutputPackage.package
       files:
-        - oldsrc/e882d22f!00000000!A19BE1FCCFBC6EEA.s4shelltools_astonished_reaction.Interaction.xml
-        - oldsrc/6017E896!00000022!E36EB044E4DF6978.s4shelltools_astonished_buff.BuffTuning.xml
-        - oldsrc/545AC67A!0017E8F6!E36EB044E4DF6978.s4shelltools_astonished_buff.SimData.xml
+        - oldsrc/s4shelltools_astonished_reaction.Interaction.xml
+        - oldsrc/s4shelltools_astonished_buff.BuffTuning.xml
+        - oldsrc/s4shelltools_astonished_buff.SimData.xml
     - name: NameOfAnotherOutputPackage.package
       files:
         - src/**/*
@@ -59,17 +59,7 @@ packages:
 The name of the package file to build, relative to the build output folder.
 
 #### files:
-List of file globs with [S4Studio](https://sims4studio.com/) formatted names. This means the files should be formatted as follows:
-
-```
-TuningType!GroupId!InstanceId.name_of_object_inside_xml.tuningType.xml
-```  
-e.g.,  
-```
-e882d22f!00000000!A19BE1FCCFBC6EEA.s4shelltools_astonished_reaction.Interaction.xml
-```
-
-This is how both [S4Studio](https://sims4studio.com/) and the XML Extractor (if you set it to be compatible with [S4Studio](https://sims4studio.com/)) export XML tuning files, so there are many examples to look at. You have to get all the numbers right for it to work. :)
+List of tuning files that can be processed by s4tk. This excludes ASM files. I'd suggest importing any ASM files into a seperate `.package` file used for just resources, then including that in the `merges` section so that it goes into the final `.package` file.
 
 As you can see in the second package in the example above, file glob expressions are also available in the `files:` lists. In fact, all entries are treated like file glob expressions, even if they only end up pointing to a single file.
 
