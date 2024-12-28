@@ -8,4 +8,4 @@ packages:
 strings:
       - name: strings_tuning.package
         files:
-          - src/220557DA!80000000!0000000099C531AC.properties
+          - strings/**/*

@@ -6,18 +6,17 @@ import fs from "fs";
 import path from "path";
 import fg from 'fast-glob';
 import fse from "fs-extra";
-import yaml from "js-yaml";
 import log4js from "log4js";
 import {Package} from "@s4tk/models";
 import {OutputFile, StringBuildDefinition} from "./types";
 import {buildStringsPackage} from "./strings";
-import {makeResourceEntry} from "./packages";
-import {canImportFile, loadYamlFile} from "./util";
+import {loadYamlFile} from "./util";
 import {MergeTarget} from "./merge";
-import {ResourceEntry} from "@s4tk/models/types";
+import {ResourceKeyService} from "./resourceKeyService";
 
 
 const log = log4js.getLogger();
+const resourceKeyService = new ResourceKeyService();
 
 export function build(configPath: string) {
     log.trace(`PWD=${process.env.PWD}`);
@@ -101,15 +100,12 @@ export class BuildProject {
     buildPackage(filepaths: string[], outputPath: string) {
         log.debug("-- buildPackage:Start");
         try {
-            const resources = new Array<ResourceEntry>();
-            filepaths.forEach(filepath => {
-                if (canImportFile(filepath)) {
-                    const entry = makeResourceEntry(filepath);
-                    resources.push(entry);
-                } else if (!filepath.endsWith('.properties')) {
-                    log.warn(`Cannot import file type: ${filepath}`)
-                }
-            });
+            log.debug("--- scanning tuning types");
+            let tuningMap = resourceKeyService.buildTuningMap(filepaths)
+            let simDataMap = resourceKeyService.simDataMap;
+            let resources = Array.from(tuningMap.values());
+            let simDatas = Array.from(simDataMap.values()).map( value => { return value.resourceKeyPair});
+            resources.push(...simDatas);
             log.trace(`using build files:${JSON.stringify(filepaths)}`);
             const outputPackage = new Package(resources);
 
