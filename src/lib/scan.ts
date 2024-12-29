@@ -3,16 +3,19 @@ import dirTree from "directory-tree";
 import {TuningData} from "./types";
 import {Conversions} from "./conversions";
 import log4js from "log4js";
-import {getPackage} from "./packages";
+import {PackageService} from "./packageService";
 import {TuningResourceType} from "@s4tk/models/enums";
+import {container} from "tsyringe";
 
 const logger = log4js.getLogger();
 
 
 export function findDuplicates(filenames: string[]) {
     const resourceMap: Map<string, Array<TuningData>> = new Map<string, Array<TuningData>>();
+    const packageService = container.resolve(PackageService);
+
     filenames.forEach(filename => {
-        const packageFile = getPackage(filename);
+        const packageFile = packageService.getPackage(filename);
         packageFile.entries.forEach(entry => {
             if (entry.value.isXml()) {
                 try {
@@ -34,7 +37,7 @@ export function findDuplicates(filenames: string[]) {
     resourceMap.forEach((value: Array<TuningData>, key: string) => {
         if (value.length > 1) {
             duplicatedCount++
-            const typeKey = key.substr(0, 8);
+            const typeKey = key.substring(0, 8);
             logger.debug(`\n${TuningResourceType[parseInt(typeKey,16)]}: ${key} ${value[0].name}`);
             value.forEach(tuningData => {
                 console.log(`${tuningData.filename}`);

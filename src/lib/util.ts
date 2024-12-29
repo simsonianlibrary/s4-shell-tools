@@ -79,34 +79,7 @@ export function parseKeyFromPath(filepath: string): ResourceKey {
 }
 
 
-/**
- * Test whether a given file can be imported by this tool
- * @param filename file to test
- */
-export function canImportFile(filename: string): boolean {
-    if (!filename.endsWith('.xml')) {
-        logger.trace(`Skipping non-XML file: ${filename}`);
-        return false
-    }
-    const resourceKey = parseKeyFromPath(filename);
-    if (BinaryResourceType[resourceKey.type]) {
-        logger.trace(`Is Binary Resource Type`);
-        return true;
-    } else if (TuningTypeName(resourceKey.type)) {
-        logger.trace(`Is Tuning Resource Type`);
-        return true;
-    }
-    logger.warn(`Skipping unhandled file type! Try importing it with S4Studio: ${filename}`);
-    return false;
-}
 
-/**
- * Generate a S4S format filename from a given resource key
- * @param resourceKey ResourceKey to generate filename for
- */
-export function generateResourceFilenameFromKey(resourceKey: ResourceKey): string {
-    return generateS4SResourceFilename(resourceKey.type, resourceKey.group, resourceKey.instance)
-}
 
 /**
  * Generate a S4S format filename from a given resource key

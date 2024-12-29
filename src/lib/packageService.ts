@@ -1,0 +1,39 @@
+import path from "path";
+import fs from "fs";
+import {PackageFileReadingOptions} from "@s4tk/models/types";
+import {Package} from "@s4tk/models";
+import log4js from "log4js";
+import {autoInjectable} from "tsyringe";
+
+const logger = log4js.getLogger();
+
+@autoInjectable()
+export class PackageService {
+    cachedBuffers: { [key: string]: Buffer; } = {};
+
+    constructor() {
+    }
+    public getBuffer(filename: string): Buffer {
+        try {
+            if (!this.cachedBuffers[filename]) {
+                const filepath = path.resolve(process.cwd(), filename);
+                this.cachedBuffers[filename] = fs.readFileSync(filepath);
+            }
+            return this.cachedBuffers[filename];
+
+        } catch (e) {
+            logger.error(`Could not open file: ${filename}:${e}`)
+        }
+
+    }
+    public savePackage(pkg:Package, outputPath:string) {
+        const buffer = pkg.getBuffer();
+        fs.writeFileSync(outputPath,buffer);
+    }
+
+    public getPackage(filename: string, options?: PackageFileReadingOptions): Package {
+        return Package.from(this.getBuffer(filename), options);
+    }
+}
+
+

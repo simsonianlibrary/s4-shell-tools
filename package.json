@@ -1,5 +1,5 @@
 {
-  "name": "@simsonianlibrary1/s4-shell-tools",
+  "name": "@simsonianlibrary/s4-shell-tools",
   "version": "1.0.5",
   "description": "A CLI wrapper for the s4tk library that provides commands to perform common operations on Sims 4 game mod files, such as .packages",
   "main": "src/S4ShellTools.ts",
@@ -21,7 +21,9 @@
     "oclif": "^4.16.2",
     "properties-reader": "^2.3.0",
     "read-yaml-file": "^2.1.0",
+    "reflect-metadata": "^0.1.14",
     "ts-command-line-args": "^2.5.1",
+    "tsyringe": "^4.8.0",
     "uuid": "^11.0.3",
     "yaml-env-defaults": "^2.0.5"
   },
