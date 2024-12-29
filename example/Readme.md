@@ -39,7 +39,7 @@ strings:
 # of the final merged package and the files list specifies which packages should be merged into the final one. Multiple merge 
 # operations can be specified. The combineStrings option is kind of experimental and isn't working correctly at the moment. 
 # It currently always combines all string entries by locale codes to create one unified STBL for each possible locale code.
-# The final STBLS will have a randomized instance id with the appropriate language code set.
+# The final STBLs will have a randomized instance id with the appropriate language code set.
 merges:
   - name: Astonisher_Mod.package
     combineStrings: false

@@ -3,6 +3,9 @@
 ## Overview
 This repository contains the Typescript code and build files to generate a command line tool to build and manipulate Sims 4 `.package` files. The command line tool is just a file organizer that relies on the [Sims 4 Tool Kit](https://sims4toolkit.com/#/) library to do the heavy lifting of managing the binary data in the `.package` files.
 
+## Requirements
+Requires Node 18+
+
 ## Installation
 I haven't set up publishing this to npmjs yet, so you will need to check out the repository, then run these commands to build the scripts:
 ```shell
@@ -11,13 +14,9 @@ npm run build
 This will build the javascript files to the `dist/` folder.
 
 To run the script, you can:
-* Install it globally by running `npm install -g` from inside the repository folder, then call it with npx: 
-  ```shell
-  npx S4ShellTools <command and options>
-  ```
 * Run the built javascript from the repo: 
   ```shell
-  $REPO_PATH/dist/S4ShellTools.js <command and options>
+   node $REPO_PATH/dist/S4ShellTools.js <command and options>
   ```
 * Run the typescript directly with npx or ts-node: 
   ```shell
@@ -56,7 +55,7 @@ Options:
   --config <configPath>
   -h, --help             display help for command
 ```
-Builds a Sims 4 mod from sources specified in a `build.yml` configuration file. This command is the point of the entire tool, and gets its own page here [Build Config Documentation](example/Readme.md). If you don't specify the config path, it will default to looking in the current directory for the `build.yml` file.
+Builds a Sims 4 mod from sources specified in a `build.yml` configuration file. This command is the point of the entire tool, and gets its own page here [Build Config Documentation](example/README.md). If you don't specify the config path, it will default to looking in the current directory for the `build.yml` file.
 
 ## merge 
 ```

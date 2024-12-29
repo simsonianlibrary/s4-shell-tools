@@ -8,7 +8,7 @@ packages:
 strings:
   - name: mod_strings.package
     files:
-      - src/strings/**/*
+      - strings/**/*
 merges:
   - name: Astonisher_Mod.package
     combineStrings: true

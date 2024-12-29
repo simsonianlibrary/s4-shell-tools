@@ -35,16 +35,16 @@ build_docker_image:
   only:
     - main # Only run this stage for the main branch
 
-# publish_module:
-#   stage: publish_module
-#   image: $NODE_IMAGE
-#   script:
-#     # Configure GitLab registry authentication
-#     - echo "@simsonianlibrary:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
-#     - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-#     - npm publish
-#   dependencies:
-#     - build # Ensure it uses the built files
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "main"' # Only publish from the main branch
- 
+publish_module:
+ stage: publish_module
+ image: $NODE_IMAGE
+ script:
+   # Configure GitLab registry authentication
+   - echo "@simsonianlibrary:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
+   - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+   - npm publish
+ dependencies:
+   - build # Ensure it uses the built files
+ rules:
+   - if: '$CI_COMMIT_BRANCH == "main"' # Only publish from the main branch
+     when: manual

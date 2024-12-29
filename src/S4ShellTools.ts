@@ -7,12 +7,13 @@ import {
     Command, option, commandOption,
 } from 'commander-ts';
 import {findDuplicateTuningFiles} from "./lib/scan";
-import {build} from "./lib/build";
-import {MergeTarget} from "./lib/merge";
+import {BuildService} from "./lib/buildService";
 
 import log4js from "log4js";
-import {buildStringsPackage, dumpStrings, printStringCountsInPackage} from "./lib/strings";
+import {StblService} from "./lib/stblService";
 import path from "path";
+import {container} from "tsyringe";
+import {MergeService} from "./lib/mergeService";
 
 const logger = log4js.getLogger();
 logger.level = "trace";
@@ -50,8 +51,13 @@ export class S4ShellTools {
         // get the project path relative to the current directory
         const projectPath = path.resolve(process.cwd(), config);
 
+        const buildManager = container.resolve(BuildService);
+
         logger.info(`Building Project: ${projectPath}`);
-        build(projectPath)
+
+        const buildFile = buildManager.loadBuildFile(projectPath);
+        buildManager.buildProject(buildFile);
+
         logger.info('Done Building Project');
     }
     @command()
@@ -64,16 +70,12 @@ export class S4ShellTools {
         const options = this.opts();
         setLogLevel(this.parent?.opts())
 
+        const mergeManager = container.resolve(MergeService);
+
         // if build output path isn't present, default to 'build' in the current directory
         const output = options.output ? options.output : "./build"
 
-        const mergeData = {
-            name:output,
-            files:packagePaths,
-            combineStrings:options.combineStrings
-        } as MergeTarget;
-        const mergeTarget = new MergeTarget(null, mergeData);
-        mergeTarget.mergePackageFilesToPath(packagePaths,output, options.combineStrings);
+        mergeManager.mergePackageFilesToPath(packagePaths,output, options.combineStrings);
     }
     @command()
     @commandOption('--output <output>')
@@ -84,10 +86,11 @@ export class S4ShellTools {
         const options = this.opts();
         setLogLevel(this.parent?.opts())
 
+        const stblService = container.resolve(StblService);
         // if build output path isn't present, default to 'build' in the current directory
         const output = options.output ? options.output : "./build"
 
-        dumpStrings(packageFile,output);
+        stblService.dumpStrings(packageFile,output);
     }
 
     @command()
@@ -99,10 +102,11 @@ export class S4ShellTools {
         const options = this.opts();
         setLogLevel(this.parent?.opts())
 
+        const stblService = container.resolve(StblService);
         // if build output path isn't present, default to 'build/strings.package' in the current directory
         const output = options.output ? options.output : "./build/strings.package"
 
-        buildStringsPackage(output,propertyFiles);
+        stblService.buildStringsPackage(output,propertyFiles);
     }
 
     @command()
@@ -111,9 +115,10 @@ export class S4ShellTools {
         @requiredArg('sourcePath') sourcePath:string,
     ) {
         setLogLevel(this.parent?.opts())
+        const stblService = container.resolve(StblService);
 
         logger.info(`Listing entry counts per STBL in: ${sourcePath}`);
-        printStringCountsInPackage(sourcePath);
+        stblService.printStringCountsInPackage(sourcePath);
     }
 
     @command()
@@ -145,4 +150,5 @@ function setLogLevel(options:any) {
             logger.warn(`Unknown log level specified: ${logLevel}. Must be one of [INFO,DEBUG,TRACE]`)
     }
 }
-const s4shelltools = new S4ShellTools();
+// @ts-ignore unused variable error
+let _ = new S4ShellTools();

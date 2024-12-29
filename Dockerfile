@@ -18,7 +18,6 @@ RUN npm run build && npm run postbuild
 # Expose a port if needed (this is usually useful for web apps, but optional here)
 EXPOSE 3000
 
-# Define the entrypoint to the build tool/script
-# If you're using npm run build or a custom script, add it here.
+
 # ENTRYPOINT ["node", "dist/S4ShellTools.js"]
- CMD ["/bin/sh"]
+CMD ["/bin/sh"]
