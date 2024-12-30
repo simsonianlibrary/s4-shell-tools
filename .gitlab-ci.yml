@@ -1,7 +1,7 @@
 variables:
   NODE_IMAGE: "node:18" # Node.js version, adjust as needed
   PACKAGE_NAME: "s4-shell-tools" # Replace with your tool's name
-  VERSION: 1.0.5
+  VERSION: 1.0.7
 
 stages:
   - build
