@@ -1,6 +1,6 @@
 {
   "name": "@simsonianlibrary/s4-shell-tools",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A CLI wrapper for the s4tk library that provides commands to perform common operations on Sims 4 game mod files, such as .packages",
   "main": "src/S4ShellTools.ts",
   "bin": "dist/S4ShellTools.js",
@@ -54,7 +54,11 @@
   "author": "simsonianlibrary@gmail.com",
   "license": "MIT",
   "files": [
-    "src/**/*"
+    "src/**/*",
+    "tsconfig.json",
+    "dist/**/*",
+    "example/**/*",
+    "README.md"
   ],
   "publishConfig": {
     "@simsonianlibrary1:registry": "https://gitlab.com/api/v4/projects/64950864/packages/npm/"

@@ -15,8 +15,10 @@ build:
   script:
     - npm install
     - npm run build
-
-
+  artifacts:
+    paths:
+      - node_modules
+      - dist
 
 # Build Docker image
 build_docker_image:
@@ -42,6 +44,7 @@ publish_module:
    # Configure GitLab registry authentication
    - echo "@simsonianlibrary:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+   - npm run build
    - npm publish
  dependencies:
    - build # Ensure it uses the built files
