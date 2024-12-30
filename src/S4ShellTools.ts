@@ -7,13 +7,13 @@ import {
     Command, option, commandOption,
 } from 'commander-ts';
 import {findDuplicateTuningFiles} from "./lib/scan";
-import {BuildService} from "./lib/buildService";
+import {BuildService} from "./lib/service/buildService";
 
 import log4js from "log4js";
-import {StblService} from "./lib/stblService";
+import {StblService} from "./lib/service/stblService";
 import path from "path";
 import {container} from "tsyringe";
-import {MergeService} from "./lib/mergeService";
+import {MergeService} from "./lib/service/mergeService";
 
 const logger = log4js.getLogger();
 logger.level = "trace";

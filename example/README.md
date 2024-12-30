@@ -1,4 +1,5 @@
 # S4ShellTools Example Mod
+![](img/build_file.png)
 
 This directory builds a ridiculous, yet functional, mod to demonstrate a few features of the S4ShellTools build process.
 
@@ -50,12 +51,12 @@ merges:
       - include/astonisher2_statue.package
 ```
 
-This build project demonstrates a few things that aren't obvious. 
+This build project demonstrates how to build a simple mod using this toolkit. 
 
 Part of the mod is built from tuning XML files, and then that package is merged with two packages with binary resources such as Object Definitions that I cloned using S4Studio, as well as the package built by the strings operations.
 
 As for the strings, there is a complete English string `.properties` file and a partial French one (that's missing one string) in the `src/strings` folder. There are also name and description strings in each of the included statue object packages. 
 
-When the final mod package is built, `Astonisher_Mod.package`, there will be one string table for each possible Sims 4 language. The French string table will have the French entries that were in the French string list, with the missing ones filled in with the English strings. All of the missing locale string tables for other languages will be filled with English strings as well. No more blank strings, and you can easily incorporate new translations as they come in. 
+When the final mod package is built, `Astonisher_Mod.package`, there will be one string table for each possible Sims 4 language. The French string table will have the French entries that were in the French string list, with the missing ones filled in with the English strings. All the missing locale string tables for other languages will be filled with English strings as well. No more blank strings, and you can easily incorporate new translations as they come in. 
 
 Note: I am adding some more attributes to the Strings package definitions to allow you to use a more persistent STBL ID between builds in an upcoming version. I would like to keep the 'merge STBLs by Language' feature, since I have a lot of mods that are built from individual object packages that initially have a couple of strings each in them (name and description). Having one string table per language at the end lets me export them to properties files so that translators can easily just edit one text file to translate the strings and send it back to me. I am open to input on how to handle these concerns in the build process. :)

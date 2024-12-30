@@ -2,10 +2,10 @@ import fs from "fs";
 import {Package, StringTableResource} from "@s4tk/models";
 import {BinaryResourceType, StringTableLocale} from "@s4tk/models/enums";
 import {ResourceKey, ResourceKeyPair, StringEntry} from "@s4tk/models/types";
-import {generateS4SResourceFilename, LocaleName, parseKeyFromPath} from "./util";
+import {LocaleName} from "../util";
 import log4js from "log4js";
 import PropertiesReader from "properties-reader";
-import {Conversions} from "./conversions";
+import {Conversions} from "../conversions";
 import getLocale = StringTableLocale.getLocale;
 import {fnv64} from "@s4tk/hashing";
 import {v4 as uuidv4} from "uuid";
@@ -13,15 +13,20 @@ import {ArrayMultimap} from "@teppeis/multimaps";
 import setHighByte = StringTableLocale.setHighByte;
 import {autoInjectable} from "tsyringe";
 import {PackageService} from "./packageService";
+import {FileService} from "./fileService";
+import {generateS4SResourceFilename, parseKeyFromPath} from "../s4studioUtil";
 
 const logger = log4js.getLogger();
 
 @autoInjectable()
 export class StblService {
     packageService: PackageService;
+    fileService: FileService;
 
-    constructor(packageManager?: PackageService) {
+    constructor(packageManager?: PackageService,
+                fileService?: FileService) {
         this.packageService = packageManager;
+        this.fileService = fileService;
     }
 
     public buildStringsPackage(outputPath:string,
@@ -54,7 +59,7 @@ export class StblService {
                 // write the resource to the new package
                 const resourceKey = {
                     type: BinaryResourceType.StringTable,
-                    group: parseInt('80000000',16),
+                    group: 0x80000000,
                     instance: Conversions.strToBigInt(instanceId)
                 } as ResourceKey;
                 logger.trace(`adding STBL : ${Conversions.keyToString(resourceKey)}`)
@@ -97,7 +102,8 @@ export class StblService {
             const stblFilename = generateS4SResourceFilename(BinaryResourceType.StringTable, 80000000, keyPair.key.instance);
 
             const outfile = `${outputDirectory}/${stblFilename}.properties`;
-            fs.writeFileSync(outfile, output);
+            this.fileService.writeBuffer(outfile, output);
+
         }
     }
 

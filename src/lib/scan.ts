@@ -1,9 +1,9 @@
 import {XmlResource} from "@s4tk/models";
 import dirTree from "directory-tree";
-import {TuningData} from "./types";
+import {TuningData} from "./model/types";
 import {Conversions} from "./conversions";
 import log4js from "log4js";
-import {PackageService} from "./packageService";
+import {PackageService} from "./service/packageService";
 import {TuningResourceType} from "@s4tk/models/enums";
 import {container} from "tsyringe";
 
