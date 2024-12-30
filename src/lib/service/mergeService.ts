@@ -22,8 +22,9 @@ import {ResourceKeyPair} from "@s4tk/models/types";
 import log4js from "log4js";
 import {StblService} from "./stblService";
 import {autoInjectable} from "tsyringe";
-import {MergeTarget} from "./types";
-import {BuildFile} from "./buildFile";
+import {MergeTarget} from "../model/types";
+import {BuildFile} from "../model/buildFile";
+import {FileService} from "./fileService";
 
 const logger = log4js.getLogger();
 
@@ -33,25 +34,30 @@ const logger = log4js.getLogger();
 export class MergeService {
     packageService: PackageService;
     stblService: StblService;
+    fileService: FileService;
 
     constructor(packageService?: PackageService,
-                stblService?: StblService) {
+                stblService?: StblService,
+                fileService?: FileService) {
         this.packageService = packageService;
         this.stblService = stblService;
+        this.fileService = fileService;
     }
     public mergeTargets(buildFile:BuildFile): void {
         buildFile.getMerges().forEach(mergeTargetData => {
             const mergeTarget = new MergeTarget(mergeTargetData);
             const outputFile = buildFile.resolveOutputPath(mergeTarget.name);
-            const donorPaths = mergeTargetData.files.map<string>(filename => buildFile.resolveProjectPath(filename))
-            this.mergePackageFilesToPath(donorPaths, outputFile, mergeTarget.combineStrings);
+            const sourcePaths = this.fileService.globsToFiles(buildFile,mergeTargetData.files);
+
+            // const sourcePaths = mergeTargetData.files.map<string>(filename => buildFile.resolveProjectPath(filename))
+            this.mergePackageFilesToPath(sourcePaths, outputFile, mergeTarget.combineStrings);
         })
 
     }
     public mergePackageFilesToPath(packagePaths:Array<string>, outputPath:string,aggregateStringTables:boolean) {
         logger.debug(`--combineStrings == ${aggregateStringTables}`)
-        const donorBuffers = packagePaths.map<Package>(path => Package.from(this.packageService.getBuffer(path)) );
-        const targetPackage = this.mergePackages(donorBuffers, aggregateStringTables);
+        const sourceBuffers = packagePaths.map<Package>(path => Package.from(this.packageService.getBuffer(path)) );
+        const targetPackage = this.mergePackages(sourceBuffers, aggregateStringTables);
         const duplicateKeys = targetPackage.findRepeatedKeys();
         if(duplicateKeys?.length) {
             duplicateKeys.forEach( (key) => {

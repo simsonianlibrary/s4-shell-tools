@@ -7,7 +7,12 @@ This repository contains the Typescript code and build files to generate a comma
 Requires Node 18+
 
 ## Installation
-I haven't set up publishing this to npmjs yet, so you will need to check out the repository, then run these commands to build the scripts:
+You can install it via npm:
+```shell
+npm install -g s4-shell-tools
+```
+
+For the latest commits, you will need to check out the repository, then run these commands to build the scripts:
 ```shell
 npm run build
 ```
@@ -18,7 +23,7 @@ To run the script, you can:
   ```shell
    node $REPO_PATH/dist/S4ShellTools.js <command and options>
   ```
-* Run the typescript directly with npx or ts-node: 
+* Alternatively run the typescript directly with npx or ts-node: 
   ```shell
   ts-node $REPO_PATH/src/S4ShellTools.ts <command and options>
   ```

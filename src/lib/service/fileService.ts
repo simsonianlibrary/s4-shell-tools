@@ -2,8 +2,9 @@ import path from "path";
 import fg from "fast-glob";
 import log4js from "log4js";
 import fse from "fs-extra";
-import {BuildFile} from "./buildFile";
+import {BuildFile} from "../model/buildFile";
 import {autoInjectable} from "tsyringe";
+import fs from "fs";
 
 const logger = log4js.getLogger();
 
@@ -42,5 +43,16 @@ export class FileService {
             return matches.length == 0;
         })
     }
-
+    public readBuffer(filePath:string): Buffer {
+        return fs.readFileSync(filePath)
+    }
+    public readString(filePath:string): string {
+        return fs.readFileSync(filePath).toString()
+    }
+    public writeBuffer(outputPath:string, packageBuffer: Buffer | string) {
+        fs.writeFileSync(outputPath, packageBuffer);
+    }
+    public writeString(outputPath:string, buffer: string) {
+        fs.writeFileSync(outputPath, buffer);
+    }
 }

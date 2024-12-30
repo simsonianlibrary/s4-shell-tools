@@ -1,4 +1,4 @@
-import {loadYamlFile} from "./util";
+import {loadYamlFile} from "../util";
 import {MergeTarget, OutputFile, StringBuildDefinition} from "./types";
 import path from "path";
 import log4js from "log4js";

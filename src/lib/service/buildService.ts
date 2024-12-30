@@ -2,7 +2,6 @@
  Tools to build many Sims 4 modding projects.
  */
 
-import fs from "fs";
 import log4js from "log4js";
 import {Package} from "@s4tk/models";
 import {StblService} from "./stblService";
@@ -10,16 +9,10 @@ import {MergeService} from "./mergeService";
 import {ResourceKeyService} from "./resourceKeyService";
 import {autoInjectable} from "tsyringe";
 import 'reflect-metadata';
-import {BuildFile} from "./buildFile";
+import {BuildFile} from "../model/buildFile";
 import {FileService} from "./fileService";
 
 const log = log4js.getLogger();
-
-/**
- * Top level function to build a Sims 4 package file from XML and string properties files
- *
- * @param configPath path to build.yml
- */
 
 /**
  * Class to manage the overall build process. It reads the build.yml file and processes the
@@ -28,8 +21,8 @@ const log = log4js.getLogger();
 @autoInjectable()
 export class BuildService {
     resourceKeyService: ResourceKeyService;
-    fileManager: FileService;
-    mergeManager: MergeService;
+    fileService: FileService;
+    mergeService: MergeService;
     stblService: StblService
 
     constructor(resourceKeyService?: ResourceKeyService,
@@ -37,20 +30,24 @@ export class BuildService {
                 mergeManager?: MergeService,
                 stblService?: StblService) {
         this.resourceKeyService = resourceKeyService;
-        this.fileManager = fileManager;
-        this.mergeManager = mergeManager;
+        this.fileService = fileManager;
+        this.mergeService = mergeManager;
         this.stblService = stblService;
     }
+
+    /**
+     * Load a build.yml file as a BuildFile instance
+     * @param path path to build.yml
+     */
     public loadBuildFile(path:string): BuildFile {
         return new BuildFile(path);
     }
     /**
      * Top level function to build a mod described by a BuildFile instance.
      */
-
     public buildProject(buildFile: BuildFile): void {
         try {
-            this.fileManager.ensureBuildDirectory(buildFile)
+            this.fileService.ensureBuildDirectory(buildFile)
             log.debug(`Packages: ${JSON.stringify(buildFile.getPackages())}`)
             log.info("buildProject:Start");
             this.buildPackages(buildFile);
@@ -67,8 +64,8 @@ export class BuildService {
         try {
             log.debug("--- scanning tuning files");
             let tuningFileCache = this.resourceKeyService.buildTuningMap(filepaths)
-            let tuningMap = tuningFileCache.tuningMap
-            let simDataMap = tuningFileCache.simDataMap;
+            let tuningMap = tuningFileCache.getTuningMap()
+            let simDataMap = tuningFileCache.getSimDataMap();
             let resources = Array.from(tuningMap.values());
             let simDatas = Array.from(simDataMap.values()).map( value => { return value.resourceKeyPair});
             resources.push(...simDatas);
@@ -80,7 +77,7 @@ export class BuildService {
             log.trace(`Package Buffer: ${packageBuffer.length} bytes`);
 
             log.trace(`writing output file: ${outputPath}`);
-            fs.writeFileSync(outputPath, packageBuffer);
+            this.fileService.writeBuffer(outputPath, packageBuffer);
 
         } catch (e) {
             log.fatal("buildPackage:ERROR");
@@ -94,7 +91,7 @@ export class BuildService {
         try {
 
             buildFile.getPackages().forEach(packageToBuild => {
-                const filepaths = this.fileManager.globsToFiles(buildFile,packageToBuild.files);
+                const filepaths = this.fileService.globsToFiles(buildFile,packageToBuild.files);
                 log.debug(`${packageToBuild.name}: ${filepaths.length} files`)
 
                 const outputPath = buildFile.resolveOutputPath(packageToBuild.name);
@@ -115,7 +112,7 @@ export class BuildService {
         log.debug("- buildStrings:Start");
         try {
             buildFile.getStringPackages().forEach(stringPackage => {
-                const filepaths = this.fileManager.globsToFiles(buildFile,stringPackage.files);
+                const filepaths = this.fileService.globsToFiles(buildFile,stringPackage.files);
                 buildFile.resolveOutputPath('strings_package.package');
                 const packageName = stringPackage.name ? stringPackage.name : `strings_package-${new Date().getTime()}.package`
                 this.stblService.buildStringsPackage(buildFile.resolveOutputPath(packageName), filepaths, stringPackage.instanceId);
@@ -131,7 +128,7 @@ export class BuildService {
         log.info("merging packages");
         log.debug("- mergePackages:Start");
         try {
-            this.mergeManager.mergeTargets(buildFile);
+            this.mergeService.mergeTargets(buildFile);
         } catch (e) {
             log.fatal(`mergePackages:ERROR:${e}`);
             throw (e);

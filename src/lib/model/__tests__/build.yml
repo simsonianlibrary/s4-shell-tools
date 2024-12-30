@@ -1,0 +1,18 @@
+output: build
+exclude:
+  - _attic
+packages:
+  - name: mod_tuning.package
+    files:
+      - src/tuning/**/*
+strings:
+  - name: mod_strings.package
+    files:
+      - strings/**/*
+merges:
+  - name: Astonisher_Mod.package
+    combineStrings: true
+    files:
+      - build/mod_strings.package
+      - build/mod_tuning.package
+      - include/**/*

@@ -4,7 +4,7 @@ exclude:
 packages:
   - name: mod_tuning.package
     files:
-      - src/tuning/**/*
+      - src/**/*
 strings:
   - name: mod_strings.package
     files:
@@ -15,5 +15,4 @@ merges:
     files:
       - build/mod_strings.package
       - build/mod_tuning.package
-      - include/astonisher_statue.package
-      - include/astonisher2_statue.package
+      - include/**/*

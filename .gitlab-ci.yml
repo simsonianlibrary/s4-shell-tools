@@ -48,3 +48,15 @@ publish_module:
  rules:
    - if: '$CI_COMMIT_BRANCH == "main"' # Only publish from the main branch
      when: manual
+
+publish_npm:
+  stage: publish_module
+  image: $NODE_IMAGE
+  script:
+    # Configure GitLab registry authentication
+    - npm publish --access public
+  dependencies:
+    - build # Ensure it uses the built files
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"' # Only publish from the main branch
+      when: manual
